@@ -6,6 +6,8 @@
 
 <p align="center">An MCP that turns coding agents into "yak (chatty)" companions.</p>
 
+<p align="center">This is a typical voice-notifying MCP, but it also works with coding agents running inside a devcontainer.</p>
+
 ## Installation
 
 Download the installer for your platform (Windows, Linux) from the [Release Page](https://github.com/thamaji/yak-mcp/releases).
