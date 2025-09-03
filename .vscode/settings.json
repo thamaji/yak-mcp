@@ -1,0 +1,62 @@
+{
+    "terminal.integrated.allowChords": false,
+
+    "files.exclude": {
+        "**/vendor/": true,
+        "**/node_modules/": true
+    },
+    "files.watcherExclude": {
+    },
+    "search.exclude": {
+    },
+
+    // HTML
+    "html.autoClosingTags": true,
+    "[html]": {
+        "files.insertFinalNewline": true,
+        "files.trimTrailingWhitespace": true,
+        "editor.detectIndentation": false,
+        "editor.tabSize": 2,
+        "editor.linkedEditing": true
+    },
+
+    // JavaScript / TypeScript
+    "typescript.autoClosingTags": true,
+    "typescript.suggest.autoImports": true,
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "biome.enabled": true,
+    "biome.lsp.bin": "webui/node_modules/.bin/biome",
+    "biome.suggestInstallingGlobally": false,
+    "[javascript][javascriptreact][typescript][typescriptreact]": {
+        "files.insertFinalNewline": true,
+        "files.trimTrailingWhitespace": true,
+        "editor.codeActionsOnSave": {
+            "quickfix.biomejs": "explicit",
+            "source.fixAll.biome": "explicit",
+            "source.organizeImports": "explicit",
+            "source.organizeImports.biome": "never"
+        },
+        "editor.defaultFormatter": "biomejs.biome",
+        "editor.insertSpaces": true,
+        "editor.detectIndentation": false,
+        "editor.tabSize": 2,
+        "editor.formatOnSave": true,
+        "editor.linkedEditing": true
+    },
+
+    // CSS
+    "[css]": {
+        "files.insertFinalNewline": true,
+        "files.trimTrailingWhitespace": true,
+        "editor.detectIndentation": false,
+        "editor.formatOnSave": true,
+        "editor.tabSize": 2
+    },
+    "cssVariables.lookupFiles": [
+        "**/*.css",
+        "**/*.scss",
+        "**/*.sass",
+        "**/*.less",
+        "webapp/node_modules/@mantine/core/styles.css"
+    ]
+}

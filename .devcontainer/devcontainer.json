@@ -1,0 +1,25 @@
+{
+	"name": "${localWorkspaceFolderBasename}",
+	"dockerComposeFile": "compose.yaml",
+	"service": "dev",
+	"containerUser": "vscode",
+	"remoteUser": "vscode",
+	"updateRemoteUserUID": true,
+	"workspaceFolder": "/workspace",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"biomejs.biome",
+				"streetsidesoftware.code-spell-checker",
+				"YoavBls.pretty-ts-errors"
+			],
+			"settings": {
+				"remote.autoForwardPortsSource": "output",
+				"files.exclude": {
+					".devcontainer/.bash": true,
+					".devcontainer/.extensions": true
+				}
+			}
+		}
+	}
+}

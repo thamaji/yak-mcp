@@ -1,0 +1,57 @@
+{
+  "name": "yak-mcp",
+  "version": "1.0.0",
+  "description": "An MCP that turns coding agents into loud, chatty companions.",
+  "main": "./out/main/index.js",
+  "author": "thamaji",
+  "homepage": "https://electron-vite.org",
+  "scripts": {
+    "lint": "tsc -b && biome check ./src",
+    "typecheck:node": "tsc --noEmit -p tsconfig.node.json --composite false",
+    "typecheck:web": "tsc --noEmit -p tsconfig.web.json --composite false",
+    "typecheck": "npm run typecheck:node && npm run typecheck:web",
+    "start": "electron-vite preview",
+    "dev": "electron-vite dev",
+    "build": "npm run typecheck && electron-vite build",
+    "postinstall": "electron-builder install-app-deps",
+    "build:unpack": "npm run build && electron-builder --dir",
+    "build:win": "npm run build && electron-builder --win",
+    "build:mac": "electron-vite build && electron-builder --mac",
+    "build:linux": "electron-vite build && electron-builder --linux"
+  },
+  "dependencies": {
+    "@electron-toolkit/preload": "^3.0.2",
+    "@electron-toolkit/utils": "^4.0.0",
+    "@mantine/core": "^8.2.8",
+    "@mantine/form": "^8.2.8",
+    "@mantine/hooks": "^8.2.8",
+    "fastmcp": "^3.15.2",
+    "zod": "^4.1.5"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.2.2",
+    "@electron-toolkit/tsconfig": "^1.0.1",
+    "@types/node": "^22.16.5",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "@vitejs/plugin-react": "^4.7.0",
+    "dmg-license": "^1.0.11",
+    "electron": "^37.2.3",
+    "electron-builder": "^25.1.8",
+    "electron-vite": "^4.0.0",
+    "postcss": "^8.5.6",
+    "postcss-preset-mantine": "^1.18.0",
+    "postcss-simple-vars": "^7.0.1",
+    "prettier": "^3.6.2",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "typescript": "^5.8.3",
+    "vite": "^7.0.5"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "electron",
+      "esbuild"
+    ]
+  }
+}

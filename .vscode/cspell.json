@@ -1,0 +1,36 @@
+{
+    "useGitignore": true,
+    "ignorePaths": [
+        ".git/objects/**",
+        "**/.gitignore",
+        ".devcontainer/**",
+        ".vscode/**",
+        "**/node_modules/**",
+        "out",
+        "dist",
+        "electron-builder.yml",
+        "package.json",
+        "pnpm-lock.yaml"
+    ],
+    "words": [
+        "Bahasa",
+        "Deutsch",
+        "electronjs",
+        "español",
+        "Estados",
+        "fastmcp",
+        "français",
+        "fullscreenable",
+        "italiano",
+        "maximizable",
+        "minimizable",
+        "Nederlands",
+        "polski",
+        "português",
+        "thamaji",
+        "Unidos",
+        "vite",
+        "русский",
+        "हिन्दी"
+    ]
+}
