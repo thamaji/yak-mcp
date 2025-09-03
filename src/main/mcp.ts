@@ -20,9 +20,9 @@ export class MCPServer {
     this.onSay = config.onSay;
   }
 
-  start(config: Config) {
+  async start(config: Config) {
     if (this.server) {
-      this.server.stop();
+      await this.server.stop();
       this.server = undefined;
     }
 
@@ -79,7 +79,7 @@ TIPS:
       },
     });
 
-    this.server.start({
+    await this.server.start({
       transportType: "httpStream",
       httpStream: {
         host: config.mcp.host,
@@ -89,9 +89,9 @@ TIPS:
     });
   }
 
-  stop() {
+  async stop() {
     if (this.server) {
-      this.server.stop();
+      await this.server.stop();
       this.server = undefined;
     }
   }
