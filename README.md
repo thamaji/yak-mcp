@@ -8,7 +8,7 @@
 
 <p align="center">This is a typical voice-notifying MCP, but it also works with coding agents running inside a devcontainer.</p>
 
-![Demo](./demo.mp4)
+<video src="demo.mp4" controls></video>
 
 > Voice: VOICEVOX:ずんだもん
 
