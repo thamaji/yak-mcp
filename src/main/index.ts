@@ -1,7 +1,8 @@
 import { electronApp, optimizer } from "@electron-toolkit/utils";
-import { app, Menu, Tray } from "electron";
+import { app, Menu, net, protocol, Tray } from "electron";
 import path from "node:path";
-import type { Config } from "./config";
+import { pathToFileURL } from "node:url";
+import { DefaultConfig, type Config } from "./config";
 import { ConfigStore } from "./configStore";
 import { ConfigWindow } from "./configWindow";
 import { MainWindow } from "./mainWindow";
@@ -20,7 +21,7 @@ const mainWindow = new MainWindow();
 const mcpServer = new MCPServer({
   name: AppName,
   version: AppVersion,
-  onSay: (text: string, config: Config["tts"]) => mainWindow.say(text, config),
+  onSay: (text: string, state: string, config: Config) => mainWindow.say(text, state, config),
 });
 
 // 設定用ウィンドウ
@@ -28,6 +29,7 @@ const configWindow = new ConfigWindow({
   onUpdate: (config) => {
     configStore.save(config);
     mcpServer.start(config);
+    mainWindow.update(config);
   },
 });
 
@@ -48,8 +50,26 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window);
   });
 
+  // renderer 向けにローカルファイルシステムのファイルを返すプロトコルを追加
+  protocol.handle("localfs", async (request) => {
+    process.platform === "win32";
+    const url = new URL(request.url);
+    const filePath = decodeURIComponent(url.pathname);
+    return net.fetch(
+      pathToFileURL(process.platform === "win32" ? filePath.replace(/^\/([A-Za-z]:)/, "$1") : filePath).href,
+    );
+  });
+
   // タスクトレイアイコン
   const contextMenu = Menu.buildFromTemplate([
+    {
+      label: "元のサイズに戻す",
+      type: "normal",
+      enabled: false,
+      click: () => {
+        mainWindow.restore();
+      },
+    },
     {
       label: "設定",
       type: "normal",
@@ -65,11 +85,38 @@ app.whenReady().then(() => {
   trayIcon.setToolTip(AppName);
   trayIcon.setContextMenu(contextMenu);
 
+  mainWindow.onMinimize(() => {
+    for (const item of contextMenu.items) {
+      if (item.label !== "元のサイズに戻す") {
+        continue;
+      }
+      item.enabled = true;
+    }
+  });
+  mainWindow.onRestore(() => {
+    for (const item of contextMenu.items) {
+      if (item.label !== "元のサイズに戻す") {
+        continue;
+      }
+      item.enabled = false;
+    }
+  });
+
+  // 設定ファイルをロード
+  const config = configStore.load();
+
   // Main Window
-  // 音声通知を出すだけのヘッドレスウィンドウ
+  // 音声通知とアバターを表示するためのウィンドウ
+  mainWindow.onReady(() => {
+    mainWindow.update(config ?? DefaultConfig);
+  });
   mainWindow.open();
 
-  const config = configStore.load();
+  // Main Window が閉じたら、Config Window も閉じる
+  mainWindow.onClose(() => {
+    configWindow.close();
+  });
+
   if (!config) {
     // 設定ファイルが存在していない場合、まずは設定ウィンドウを起動
     configWindow.open(undefined);

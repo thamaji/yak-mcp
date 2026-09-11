@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/suspicious/noExplicitAny: 仕方がない */
 export {};
 
 declare global {

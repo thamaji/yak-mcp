@@ -20,11 +20,13 @@ export class ConfigWindow {
     }
 
     this.window = new BrowserWindow({
-      width: 512,
-      height: 634,
-      resizable: false,
-      minimizable: false,
-      maximizable: false,
+      width: 371 + 74,
+      height: 600,
+      minWidth: 371 + 74,
+      minHeight: 600,
+      resizable: true,
+      minimizable: true,
+      maximizable: true,
       fullscreenable: false,
       show: false,
       autoHideMenuBar: true,
@@ -63,6 +65,10 @@ export class ConfigWindow {
       this.onUpdateCallback?.(config);
       this.window?.close();
     });
+  }
+
+  close() {
+    this.window?.close();
   }
 
   onUpdate(callback: (config: Config) => void): void {

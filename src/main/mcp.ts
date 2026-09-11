@@ -5,13 +5,13 @@ import type { Config } from "./config";
 type MCPServerConfig = {
   name: string;
   version: `${number}.${number}.${number}`;
-  onSay: (text: string, config: Config["tts"]) => void;
+  onSay: (text: string, state: string, config: Config) => void;
 };
 
 export class MCPServer {
   private name: string;
   private version: `${number}.${number}.${number}`;
-  private onSay: (text: string, config: Config["tts"]) => void;
+  private onSay: (text: string, state: string, config: Config) => void;
   private server: FastMCP | undefined;
 
   constructor(config: MCPServerConfig) {
@@ -34,48 +34,30 @@ export class MCPServer {
     this.server.addTool({
       name: "say",
       description: `WHEN TO USE:
-Use this tool when the coding agent needs to speak directly to a human —
-for reporting important events, announcing task completion, expressing emotions, or casually murmuring about less critical actions.
+Use this tool when having voice communication with human.
+It's useful for reporting important events, announcing task completion, expressing emotions, or even for casual conversation and telling jokes.
 
 HOW TO USE:
-- Provide the "text" parameter with the message to deliver.
-- Choose the "volume" parameter according to the situation:
-  - SuperShouting: Critical alerts, long-running task completion, or urgent reports.
-  - Shouting: Celebrations of success or expressions of sadness over failures.
-  - Normal: Routine updates on upcoming or ongoing work.
-  - Whisper: Informal comments, minor updates, or unimportant side notes.
-
-FEATURES:
-- Allows the coding agent to convey not only information but also tone and emotion.
-- Supports four distinct speaking styles to match the context.
-
-LIMITATIONS:
-- Does not process or interpret human speech; output only.
-- Emotional nuance is limited to the predefined volume levels.
-- Overuse of SuperShouting or Shouting may overwhelm the human listener.
+The "text" argument specifies the message you want to say, and the "state" argument specifies your state that best fits the message.
 
 TIPS:
-- Reserve SuperShouting for truly critical or celebratory events to maintain its impact.
-- Use Shouting strategically to highlight both positive and negative outcomes.
-- Employ Normal for steady narration of workflow.
-- Leverage Whisper for humor, side comments, or low-priority notes to keep interactions natural.
+- The "text" argument should be carefully designed to prevent misinterpretation by the text-to-speech engine. For example, kanji characters with multiple pronunciations should be converted to katakana.
+- Difficult-to-understand strings of characters, such as URLs and UUIDs, should be replaced with short, abstract nouns that explain them. For example, "https://google.com/" should be replaced with "Google".
+- The "text" argument should be concise and not too long. It should be no more than 200 characters.
 `,
       parameters: z.object({
-        text: z.string().describe(`The text to be spoken aloud, provided in ${config.tts.lang}.`),
-        volume: z
-          .enum(["SuperShouting", "Shouting", "Normal", "Whisper"])
-          .describe("The speaking volume level, ranging from very loud (SuperShouting) to very quiet (Whisper)."),
+        text: z.string().describe("The text to be spoken aloud."),
+        state: z
+          .union([
+            z.literal("waiting").describe("waiting, doing nothing, having nothing to do"),
+            ...config.avatar.states.map((state) => z.literal(state.key).describe(state.description)),
+          ])
+          .describe("Specify the state that best matches the text.")
+          .default("waiting"),
       }),
-      execute: async (args) => {
-        const volume =
-          args.volume === "SuperShouting"
-            ? 1.0
-            : args.volume === "Shouting"
-              ? 0.9
-              : args.volume === "Normal"
-                ? 0.75
-                : 0.5;
-        this.onSay(args.text, { ...config.tts, volume: config.tts.volume * volume });
+      // biome-ignore lint/suspicious/noExplicitAny: see parameters
+      execute: async (args: any) => {
+        this.onSay(args.text, config.avatar.states.find((sate) => sate.key === args.state)?.key ?? "waiting", config);
       },
     });
 
