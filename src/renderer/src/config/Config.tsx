@@ -16,14 +16,15 @@ import {
   TextInput,
 } from "@mantine/core";
 import { isNotEmpty, matches, useForm } from "@mantine/form";
-import type React from "react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 export const Config: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   const form = useForm({
     mode: "uncontrolled",
+    validateInputOnChange: true,
+    validateInputOnBlur: true,
     initialValues: {
       mcp: {
         host: "",
@@ -63,11 +64,29 @@ export const Config: React.FC = () => {
       },
       tts: {
         voicevox: {
-          baseURL: isNotEmpty(),
+          baseURL: (value: string) => {
+            try {
+              const url = new URL(value);
+              if (url.protocol !== "http:" && url.protocol !== "https:") {
+                return "Invalid URL";
+              }
+              return null;
+            } catch {
+              return "Invalid URL";
+            }
+          },
           speakerID: isNotEmpty(),
         },
       },
-      avatar: {},
+      avatar: {
+        waiting: {
+          path: isNotEmpty(),
+        },
+        states: {
+          key: isNotEmpty(),
+          path: isNotEmpty(),
+        },
+      },
     },
   });
 
@@ -156,7 +175,7 @@ export const Config: React.FC = () => {
           <Tabs.Tab value="avatar">Avatar</Tabs.Tab>
         </Tabs.List>
 
-        <ConfigTabsPanel value="mcp" isChanged={!form.isDirty()}>
+        <ConfigTabsPanel value="mcp" isChanged={!form.isDirty()} isValid={form.isValid()}>
           <InputLabel>Bind Address</InputLabel>
           <TextInput key={form.key("mcp.host")} {...form.getInputProps("mcp.host")} />
 
@@ -170,7 +189,7 @@ export const Config: React.FC = () => {
           />
         </ConfigTabsPanel>
 
-        <ConfigTabsPanel value="tts" isChanged={!form.isDirty()}>
+        <ConfigTabsPanel value="tts" isChanged={!form.isDirty()} isValid={form.isValid()}>
           <InputLabel>TTS Provider</InputLabel>
           <InputDescription>Select a text-to-speech provider.</InputDescription>
           <Select
@@ -358,7 +377,7 @@ export const Config: React.FC = () => {
           )}
         </ConfigTabsPanel>
 
-        <ConfigTabsPanel value="avatar" isChanged={!form.isDirty()}>
+        <ConfigTabsPanel value="avatar" isChanged={!form.isDirty()} isValid={form.isValid()}>
           <Checkbox
             mt="sm"
             variant="outline"
@@ -415,8 +434,8 @@ export const Config: React.FC = () => {
 
             <Divider my="sm" />
 
-            {form.values.avatar.states.map((_, i) => (
-              <>
+            {form.values.avatar.states.map((state, i) => (
+              <React.Fragment key={`avatar.states.${state.key}_${state.description}_${state.path}_${i}`}>
                 <InputLabel>Key</InputLabel>
                 <InputDescription>A unique key to identify an emotional state.</InputDescription>
                 <TextInput key={form.key(`avatar.states.${i}.key`)} {...form.getInputProps(`avatar.states.${i}.key`)} />
@@ -448,7 +467,10 @@ export const Config: React.FC = () => {
                     color="red"
                     size="xs"
                     onClick={() => {
+                      console.log(form.values.avatar.states);
+                      console.log("removeListItem", "avatar.states", i);
                       form.removeListItem("avatar.states", i);
+                      console.log(form.values.avatar.states);
                     }}
                   >
                     Remove
@@ -456,7 +478,7 @@ export const Config: React.FC = () => {
                 </Group>
 
                 <Divider my="sm" />
-              </>
+              </React.Fragment>
             ))}
 
             <Group justify="flex-start" my="sm">
@@ -478,9 +500,10 @@ export const Config: React.FC = () => {
   );
 };
 
-const ConfigTabsPanel: React.FC<React.PropsWithChildren<{ value: string; isChanged: boolean }>> = ({
+const ConfigTabsPanel: React.FC<React.PropsWithChildren<{ value: string; isChanged: boolean; isValid: boolean }>> = ({
   value,
   isChanged,
+  isValid,
   children,
 }) => (
   <Tabs.Panel value={value}>
@@ -488,7 +511,7 @@ const ConfigTabsPanel: React.FC<React.PropsWithChildren<{ value: string; isChang
       {children}
     </ScrollArea>
     <Group h="50px" justify="flex-end" py="5px" px="10px">
-      <Button type="submit" disabled={isChanged}>
+      <Button type="submit" disabled={isChanged || !isValid}>
         Save
       </Button>
     </Group>

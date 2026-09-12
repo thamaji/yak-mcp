@@ -71,6 +71,14 @@ app.whenReady().then(() => {
       },
     },
     {
+      label: "位置をリセット",
+      type: "normal",
+      enabled: true,
+      click: () => {
+        mainWindow.resetPosition();
+      },
+    },
+    {
       label: "設定",
       type: "normal",
       enabled: true,
@@ -104,26 +112,27 @@ app.whenReady().then(() => {
 
   // 設定ファイルをロード
   const config = configStore.load();
+  if (!config) {
+    // 設定ファイルが存在していない場合、設定ウィンドウを開く
+    configWindow.open(undefined);
+  } else {
+    // MCPサーバー起動
+    mcpServer.start(config);
+  }
 
   // Main Window
   // 音声通知とアバターを表示するためのウィンドウ
   mainWindow.onReady(() => {
     mainWindow.update(config ?? DefaultConfig);
   });
-  mainWindow.open();
 
   // Main Window が閉じたら、Config Window も閉じる
   mainWindow.onClose(() => {
     configWindow.close();
   });
 
-  if (!config) {
-    // 設定ファイルが存在していない場合、まずは設定ウィンドウを起動
-    configWindow.open(undefined);
-  } else {
-    // MCPサーバー起動
-    mcpServer.start(config);
-  }
+  // Main Window を開く
+  mainWindow.open();
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common
