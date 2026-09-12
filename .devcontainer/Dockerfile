@@ -117,17 +117,6 @@ RUN --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
         ca-certificates-mono \
         mono-devel
 
-# install crush
-ARG CRUSH_VERSION=0.7.4
-RUN --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
-    --mount=type=cache,target=/var/cache/apt,sharing=locked \
-    apt-get update \
-    && apt-get install -y --no-install-recommends \
-        curl \
-        tar \
-    && curl -fsSL --compressed "https://github.com/charmbracelet/crush/releases/download/v${CRUSH_VERSION}/crush_${CRUSH_VERSION}_Linux_x86_64.tar.gz" \
-        | tar xz --strip-components 1 -C /usr/local/bin "crush_${CRUSH_VERSION}_Linux_x86_64/crush"
-
 # TypeScript Language Server
 RUN npm install -g \
     typescript-language-server \
