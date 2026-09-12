@@ -24,6 +24,7 @@ export type Config = {
   };
   avatar: {
     mirror: boolean;
+    animation: string;
     waiting: {
       path: string;
     };
@@ -38,7 +39,7 @@ export type Config = {
 export const DefaultConfig: Config = {
   mcp: {
     host: "0.0.0.0",
-    port: 8080,
+    port: 39442,
   },
   tts: {
     provider: "webSpeechAPI",
@@ -58,13 +59,14 @@ export const DefaultConfig: Config = {
   },
   avatar: {
     mirror: false,
+    animation: "sway",
     waiting: {
       path: path.join(app.getAppPath(), "resources", "waiting.gif"),
     },
     states: [
       {
-        key: "talking",
-        description: "normal, emotionless",
+        key: "neutral",
+        description: "neutral, normal, emotionless",
         path: path.join(app.getAppPath(), "resources", "talking.gif"),
       },
       {

@@ -63,7 +63,6 @@ export class ConfigWindow {
 
     ipcMain.on("config:update", (_, config: Config) => {
       this.onUpdateCallback?.(config);
-      this.window?.close();
     });
   }
 

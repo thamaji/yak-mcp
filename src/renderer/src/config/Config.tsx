@@ -47,6 +47,7 @@ export const Config: React.FC = () => {
       },
       avatar: {
         mirror: false,
+        animation: "sway",
         waiting: {
           path: "",
         },
@@ -60,7 +61,12 @@ export const Config: React.FC = () => {
         ),
         port: isNotEmpty(),
       },
-      tts: {},
+      tts: {
+        voicevox: {
+          baseURL: isNotEmpty(),
+          speakerID: isNotEmpty(),
+        },
+      },
       avatar: {},
     },
   });
@@ -95,6 +101,7 @@ export const Config: React.FC = () => {
         },
         avatar: {
           mirror: config.avatar.mirror,
+          animation: config.avatar.animation,
           waiting: { ...config.avatar.waiting },
           states: config.avatar.states.map((state) => ({ ...state })),
         },
@@ -130,6 +137,7 @@ export const Config: React.FC = () => {
           },
           avatar: {
             mirror: values.avatar.mirror,
+            animation: values.avatar.animation,
             waiting: { ...values.avatar.waiting },
             states: values.avatar.states
               .filter((state) => state.key.trim() !== "" && state.path.trim() !== "")
@@ -359,6 +367,25 @@ export const Config: React.FC = () => {
             key={form.key("avatar.mirror")}
             checked={form.values.avatar.mirror}
             onChange={(event) => form.setFieldValue("avatar.mirror", event.currentTarget.checked)}
+          />
+
+          <InputLabel mt="sm">Animation</InputLabel>
+          <Select
+            data={[
+              { label: "None", value: "none" },
+              { label: "Sway", value: "sway" },
+              { label: "Weight shift", value: "weight-shift" },
+              { label: "Breathing", value: "breathing" },
+              { label: "Float", value: "float" },
+            ]}
+            clearable={false}
+            value={form.values.avatar.animation}
+            onChange={(animation) => {
+              if (!animation) {
+                return;
+              }
+              form.setFieldValue("avatar.animation", animation);
+            }}
           />
 
           <Fieldset mt="sm" legend="Emotional states">

@@ -15,11 +15,12 @@
         overflow: hidden;
       }
 
-      .wiggle {
-        animation: wiggle 4s ease-in-out infinite;
+      .sway {
+        animation: sway 4s ease-in-out infinite;
+        transform-origin: center bottom;
       }
 
-      @keyframes wiggle {
+      @keyframes sway {
         0% {
           transform: rotate(-2deg);
         }
@@ -28,6 +29,55 @@
         }
         100% {
           transform: rotate(-2deg);
+        }
+      }
+
+      .weight-shift {
+        transform-origin: center bottom;
+        animation: weight-shift 6s ease-in-out infinite;
+      }
+
+      @keyframes weight-shift {
+        0%,
+        100% {
+          transform: translateX(-2px) rotate(-1deg);
+        }
+        50% {
+          transform: translateX(2px) rotate(1deg);
+        }
+      }
+
+      .breathing {
+        animation: breathing 3.2s ease-in-out infinite;
+        transform-origin: center bottom;
+      }
+
+      @keyframes breathing {
+        0% {
+          transform: scaleY(1);
+        }
+        40% {
+          transform: scaleY(0.96);
+        }
+        50% {
+          transform: scaleY(0.95);
+        }
+        100% {
+          transform: scaleY(1);
+        }
+      }
+
+      .float {
+        animation: float 3s ease-in-out infinite;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-3px);
         }
       }
 

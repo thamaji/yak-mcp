@@ -84,7 +84,7 @@ Add the following to `config.toml`:
 
 ```toml
 [mcp_servers.yak]
-url = "http://localhost:8080/mcp"
+url = "http://localhost:39442/mcp"
 ```
 
 #### Claude Code
@@ -96,7 +96,7 @@ Add the following to `.mcp.json`:
   "mcpServers": {
     "yak": {
       "type": "http",
-      "url": "http://localhost:8080/mcp"
+      "url": "http://localhost:39442/mcp"
     }
   }
 }

@@ -5,7 +5,11 @@ import { avatarStore } from "./avatarStore";
 
 // biome-ignore lint/suspicious/noExplicitAny: see: src/main/config.tts.ts Config
 window.electron.ipcRenderer.on("main:update", async (_, config: any) => {
-  avatarStore.publish({path: config.avatar.waiting.path, mirror: config.avatar.mirror});
+  avatarStore.publish({
+    path: config.avatar.waiting.path,
+    mirror: config.avatar.mirror,
+    animation: config.avatar.animation,
+  });
 });
 
 // biome-ignore lint/suspicious/noExplicitAny: see: src/main/config.tts.ts Config
@@ -26,13 +30,21 @@ window.electron.ipcRenderer.on("main:say", async (_, text: string, state: string
     utterance.rate = config.tts.webSpeechAPI.rate;
 
     try {
-      avatarStore.publish({path: speakingPath, mirror: config.avatar.mirror});
-      await new Promise (resolve => {
+      avatarStore.publish({
+        path: speakingPath,
+        mirror: config.avatar.mirror,
+        animation: config.avatar.animation,
+      });
+      await new Promise((resolve) => {
         utterance.onend = resolve;
         window.speechSynthesis.speak(utterance);
       });
     } finally {
-      avatarStore.publish({path: waitingPath, mirror: config.avatar.mirror});
+      avatarStore.publish({
+        path: waitingPath,
+        mirror: config.avatar.mirror,
+        animation: config.avatar.animation,
+      });
     }
 
     return;
@@ -40,7 +52,7 @@ window.electron.ipcRenderer.on("main:say", async (_, text: string, state: string
 
   if (config.tts.provider === "voicevox") {
     // 音声合成用クエリを作成
-    config.tts.voicevox.baseURL.tr
+    config.tts.voicevox.baseURL.tr;
 
     const queryResponse = await fetch(
       `${config.tts.voicevox.baseURL}/audio_query?speaker=${config.tts.voicevox.speakerID}&text=${encodeURIComponent(text)}`,
@@ -78,13 +90,21 @@ window.electron.ipcRenderer.on("main:say", async (_, text: string, state: string
     audio.volume = config.tts.voicevox.volume;
 
     try {
-      avatarStore.publish({path: speakingPath, mirror: config.avatar.mirror});
-      await new Promise(resolve => {
+      avatarStore.publish({
+        path: speakingPath,
+        mirror: config.avatar.mirror,
+        animation: config.avatar.animation,
+      });
+      await new Promise((resolve) => {
         audio.addEventListener("ended", resolve, { once: true });
         audio.play();
       });
     } finally {
-      avatarStore.publish({path: waitingPath, mirror: config.avatar.mirror});
+      avatarStore.publish({
+        path: waitingPath,
+        mirror: config.avatar.mirror,
+        animation: config.avatar.animation,
+      });
       URL.revokeObjectURL(audioURL);
     }
   }

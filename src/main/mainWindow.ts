@@ -40,6 +40,7 @@ export class MainWindow {
     });
     this.window.setAspectRatio(1);
     this.window.setMenuBarVisibility(false);
+
     this.window.on("minimize", () => {
       this._onMinimize?.();
     });
@@ -49,6 +50,17 @@ export class MainWindow {
     this.window.on("close", () => {
       this._onClose?.();
     });
+
+    this.window.setAlwaysOnTop(true, "floating");
+    this.window.moveTop();
+    const interval = setInterval(() => {
+      if (!this.window || this.window.isDestroyed()) {
+        clearInterval(interval);
+        return;
+      }
+
+      this.window.moveTop();
+    }, 3000);
 
     if (is.dev && process.env.ELECTRON_RENDERER_URL) {
       this.window.loadURL(`${process.env.ELECTRON_RENDERER_URL}/main.html`);

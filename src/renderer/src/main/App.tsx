@@ -12,7 +12,7 @@ export const App: React.FC = () => {
   return (
     <div className="avatar_container" style={avatar?.mirror ? { transform: "scaleX(-1)" } : {}}>
       {/** biome-ignore lint/a11y/useAltText: デスクトップマスコットなので気にしない */}
-      {avatar && <img className="avatar_image wiggle" src={avatar.path} />}
+      {avatar && <img className={`avatar_image ${avatar.animation}`} src={avatar.path} />}
     </div>
   );
 };
