@@ -12,7 +12,11 @@
 
 https://github.com/user-attachments/assets/e9f086b2-13bf-4bf3-9ebc-5ec3d65538ad
 
+https://github.com/user-attachments/assets/16c76517-de31-479b-834f-a9a3b00f484b
+
 > Voice: VOICEVOX:ずんだもん
+
+You can do things like this with just a GIF image.
 
 ## Installation
 
