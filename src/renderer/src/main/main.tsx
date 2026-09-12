@@ -52,8 +52,6 @@ window.electron.ipcRenderer.on("main:say", async (_, text: string, state: string
 
   if (config.tts.provider === "voicevox") {
     // 音声合成用クエリを作成
-    config.tts.voicevox.baseURL.tr;
-
     const queryResponse = await fetch(
       `${config.tts.voicevox.baseURL}/audio_query?speaker=${config.tts.voicevox.speakerID}&text=${encodeURIComponent(text)}`,
       { method: "POST" },
