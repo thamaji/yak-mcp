@@ -1,6 +1,5 @@
 import {
   Button,
-  Checkbox,
   Divider,
   Fieldset,
   Group,
@@ -49,6 +48,8 @@ export const Config: React.FC = () => {
       avatar: {
         mirror: false,
         animation: "sway",
+        opacity: 100,
+        ignoreMouseEvents: false,
         waiting: {
           path: "",
         },
@@ -121,6 +122,8 @@ export const Config: React.FC = () => {
         avatar: {
           mirror: config.avatar.mirror,
           animation: config.avatar.animation,
+          opacity: config.avatar.opacity * 100,
+          ignoreMouseEvents: config.avatar.ignoreMouseEvents,
           waiting: { ...config.avatar.waiting },
           states: config.avatar.states.map((state) => ({ ...state })),
         },
@@ -157,6 +160,8 @@ export const Config: React.FC = () => {
           avatar: {
             mirror: values.avatar.mirror,
             animation: values.avatar.animation,
+            opacity: values.avatar.opacity / 100,
+            ignoreMouseEvents: values.avatar.ignoreMouseEvents,
             waiting: { ...values.avatar.waiting },
             states: values.avatar.states
               .filter((state) => state.key.trim() !== "" && state.path.trim() !== "")
@@ -378,14 +383,21 @@ export const Config: React.FC = () => {
         </ConfigTabsPanel>
 
         <ConfigTabsPanel value="avatar" isChanged={!form.isDirty()} isValid={form.isValid()}>
-          <Checkbox
-            mt="sm"
-            variant="outline"
-            label="Mirror"
-            description="The avatar image will be displayed horizontally flipped"
-            key={form.key("avatar.mirror")}
-            checked={form.values.avatar.mirror}
-            onChange={(event) => form.setFieldValue("avatar.mirror", event.currentTarget.checked)}
+          <InputLabel>Mirror</InputLabel>
+          <InputDescription>The avatar image will be displayed horizontally flipped</InputDescription>
+          <Select
+            data={[
+              { label: "Disabled", value: "disabled" },
+              { label: "Enabled", value: "enabled" },
+            ]}
+            clearable={false}
+            value={form.values.avatar.mirror ? "enabled" : "disabled"}
+            onChange={(mirror) => {
+              if (!mirror) {
+                return;
+              }
+              form.setFieldValue("avatar.mirror", mirror === "enabled");
+            }}
           />
 
           <InputLabel mt="sm">Animation</InputLabel>
@@ -404,6 +416,41 @@ export const Config: React.FC = () => {
                 return;
               }
               form.setFieldValue("avatar.animation", animation);
+            }}
+          />
+
+          <InputLabel mt="sm">Opacity</InputLabel>
+          <Slider
+            mb="md"
+            min={0}
+            max={100}
+            marks={[
+              { value: 0, label: "0%" }, // 0
+              { value: 50, label: "50%" }, // 0.5
+              { value: 100, label: "100%" }, // 1
+            ]}
+            value={form.values.avatar.opacity}
+            onChange={(value) => form.setFieldValue("avatar.opacity", value)}
+          />
+
+          <InputLabel mt="sm">Ignore mouse events</InputLabel>
+          <InputDescription>
+            When enabled, all mouse operations on the avatar window will be transparent to the window behind it.
+            <br />
+            Disable this setting if you want to move the avatar window.
+          </InputDescription>
+          <Select
+            data={[
+              { label: "Disabled", value: "disabled" },
+              { label: "Enabled", value: "enabled" },
+            ]}
+            clearable={false}
+            value={form.values.avatar.ignoreMouseEvents ? "enabled" : "disabled"}
+            onChange={(ignoreMouseEvents) => {
+              if (!ignoreMouseEvents) {
+                return;
+              }
+              form.setFieldValue("avatar.ignoreMouseEvents", ignoreMouseEvents === "enabled");
             }}
           />
 
@@ -507,7 +554,7 @@ const ConfigTabsPanel: React.FC<React.PropsWithChildren<{ value: string; isChang
   children,
 }) => (
   <Tabs.Panel value={value}>
-    <ScrollArea h="calc(100vh - 50px)" py="5px" px="10px" type="auto" offsetScrollbars="y">
+    <ScrollArea h="calc(100vh - 50px)" py="5px" px="10px" type="auto" offsetScrollbars="y" scrollbars="y">
       {children}
     </ScrollArea>
     <Group h="50px" justify="flex-end" py="5px" px="10px">

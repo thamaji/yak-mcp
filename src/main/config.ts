@@ -25,6 +25,8 @@ export type Config = {
   avatar: {
     mirror: boolean;
     animation: string;
+    opacity: number;
+    ignoreMouseEvents: boolean;
     waiting: {
       path: string;
     };
@@ -60,6 +62,8 @@ export const DefaultConfig: Config = {
   avatar: {
     mirror: false,
     animation: "sway",
+    opacity: 1.0,
+    ignoreMouseEvents: false,
     waiting: {
       path: path.join(app.getAppPath(), "resources", "waiting.gif"),
     },

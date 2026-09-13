@@ -180,6 +180,19 @@ export class ConfigStore {
       }
 
       if (
+        config.avatar.opacity == null ||
+        !Number.isFinite(config.avatar.opacity) ||
+        config.avatar.opacity < 0 ||
+        config.avatar.opacity > 1
+      ) {
+        config.avatar.opacity = DefaultConfig.avatar.opacity;
+      }
+
+      if (config.avatar.ignoreMouseEvents == null || typeof config.avatar.ignoreMouseEvents !== "boolean") {
+        config.avatar.ignoreMouseEvents = DefaultConfig.avatar.ignoreMouseEvents;
+      }
+
+      if (
         config.avatar.waiting == null ||
         typeof config.avatar.waiting !== "object" ||
         Array.isArray(config.avatar.waiting)

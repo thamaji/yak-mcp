@@ -154,6 +154,8 @@ export class MainWindow {
   }
 
   update(config: Config): void {
+    this.window?.setOpacity(config.avatar.opacity);
+    this.window?.setIgnoreMouseEvents(config.avatar.ignoreMouseEvents, { forward: true });
     this.window?.webContents.send("main:update", {
       ...config,
       avatar: {
@@ -169,7 +171,7 @@ export class MainWindow {
     });
   }
 
-  say(text: string, state, config: Config): void {
+  say(text: string, state: string, config: Config): void {
     this.window?.webContents.send("main:say", text, state, {
       ...config,
       avatar: {

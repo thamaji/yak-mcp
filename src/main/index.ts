@@ -94,20 +94,18 @@ app.whenReady().then(() => {
   trayIcon.setContextMenu(contextMenu);
 
   mainWindow.onMinimize(() => {
-    for (const item of contextMenu.items) {
-      if (item.label !== "元のサイズに戻す") {
-        continue;
-      }
-      item.enabled = true;
+    const item = contextMenu.items.find((item) => item.label === "元のサイズに戻す");
+    if (!item) {
+      return;
     }
+    item.enabled = true;
   });
   mainWindow.onRestore(() => {
-    for (const item of contextMenu.items) {
-      if (item.label !== "元のサイズに戻す") {
-        continue;
-      }
-      item.enabled = false;
+    const item = contextMenu.items.find((item) => item.label === "元のサイズに戻す");
+    if (!item) {
+      return;
     }
+    item.enabled = false;
   });
 
   // 設定ファイルをロード
