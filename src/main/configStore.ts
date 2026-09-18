@@ -38,6 +38,10 @@ export class ConfigStore {
         config.mcp.port = DefaultConfig.mcp.port;
       }
 
+      if (config.mcp.restAPI == null || typeof config.mcp.restAPI !== "boolean") {
+        config.mcp.restAPI = DefaultConfig.mcp.restAPI;
+      }
+
       if (config.tts == null || typeof config.tts !== "object" || Array.isArray(config.tts)) {
         config.tts = DefaultConfig.tts;
       }

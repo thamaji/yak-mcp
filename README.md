@@ -4,98 +4,118 @@
   <img width="400" alt="yak-mcp" src="./yak-mcp.png" />
 </p>
 
-<p align="center">An MCP that turns coding agents into "yak (chatty)" companions.</p>
+<p align="center">An MCP that turns AI agents into "chatty" companions.</p>
 
-<p align="center">This is a typical voice-notifying MCP, but it also works with coding agents running inside a devcontainer.</p>
+<p align="center">This is a typical desktop mascot-style voice notification MCP, but it can also work with AI agents running inside devcontainers.</p>
+
+Translations: [English](./README.md) | [日本語](./README-ja.md)
 
 ## Demo
 
-Try unmuting and playing it.
+This demo includes audio. Please unmute your device and play it.
 
 https://github.com/user-attachments/assets/e9f086b2-13bf-4bf3-9ebc-5ec3d65538ad
 
+> Voice: VOICEVOX: ずんだもん
+
+You can freely customize the avatar image.
+By preparing an animated GIF or APNG, you can create avatars like this:
+
 https://github.com/user-attachments/assets/1143fea3-f8cb-4317-8869-c5e23d893e63
 
-> Voice: VOICEVOX:ずんだもん
-
-You can do things like this with just a GIF image.
+> Voice: VOICEVOX: ずんだもん
 
 ## Installation
 
-Download the installer for your platform (Windows or Linux) from the [Release Page](https://github.com/thamaji/yak-mcp/releases).
+Download the installer for your platform from the [Releases](https://github.com/thamaji/yak-mcp/releases) page.
 
-**Note for Linux users:** I do not have a Linux desktop environment, so I have not been able to test the Linux build. I have successfully built the Linux version, but I cannot verify that it works correctly. Thank you for your understanding.
+**Linux users:** I do not have a Linux desktop environment, so I have not been able to verify that yak-mcp works correctly on Linux. I was able to build the Linux version successfully, but I cannot guarantee that it works as expected. Thank you for your understanding.
 
-**Note for macOS users:** I was unable to build a macOS installer in my environment. If you need one, please build it yourself by following the instructions in this repository. Thank you for your understanding.
+**macOS users:** I was unable to build the macOS version in my environment. Please follow the instructions for developers below and try building it yourself. Thank you for your understanding.
 
 ## Setup
 
-When you first launch the application, the settings screen will appear.
+When you launch the application for the first time, the settings window will be displayed.
+Adjust the settings as needed, then click the **Save** button to start the MCP server.
+
+From the next launch onward, the MCP server will start automatically.
+If you want to change the settings, you can open the settings window at any time from the system tray icon.
 
 ### MCP Server
 
-* **Host:** Enter the IP address to bind the server to.
-
-  * If you want to use it from a coding agent inside a devcontainer, `0.0.0.0` is recommended.
-* **Port:** Specify an available port for the server.
+- **Host:** Specifies the address on which the MCP server listens.
+  - `0.0.0.0` is recommended when accessing it from a devcontainer.
+- **Port:** Specifies the port number on which the MCP server listens.
+- **REST API:** When enabled, yak-mcp also exposes REST API endpoints in addition to the MCP server. This allows agent skills and other applications to use yak-mcp's functionality.
 
 ### TTS (Text-to-Speech)
 
-You can choose between the **Web Speech API** and **VOICEVOX**.
+You can choose between the built-in **Web Speech API** and **VOICEVOX**.
 
-VOICEVOX requires the [VOICEVOX Engine](https://github.com/VOICEVOX/voicevox_engine) to be installed and running.
+To use VOICEVOX, the [VOICEVOX Engine](https://github.com/VOICEVOX/voicevox_engine) must be running.
 
 #### Web Speech API
 
-* **Language:** Choose the language for speech output.
-* **Volume:** Adjust the speaking volume.
-* **Pitch:** Set the pitch (voice height).
-* **Rate:** Set the reading speed.
+- **Language:** Select the language to use.
+- **Volume:** Specifies the voice volume.
+- **Pitch:** Specifies the voice pitch.
+- **Rate:** Specifies the speech rate.
 
 #### VOICEVOX
 
-* **Base URL:** Specify the base URL of the VOICEVOX Engine REST API. In a standard setup, use `http://localhost:50021`.
-* **Speaker ID:** Specify the ID of the speaker you want to use. If the VOICEVOX Engine is running locally, you can retrieve the list of available speakers from `http://localhost:50021/speakers`.
-* **Volume:** Adjust the speaking volume.
-* **Pitch:** Set the pitch (voice height).
-* **Rate:** Set the reading speed.
+- **Base URL:** Specifies the REST API endpoint provided by VOICEVOX Engine. For a standard setup, use `http://localhost:50021`.
+- **Speaker ID:** Specifies the speaker ID. In a standard setup, access `http://localhost:50021/speakers` to view the list of speakers and their IDs.
+- **Volume:** Specifies the voice volume.
+- **Pitch:** Specifies the voice pitch.
+- **Rate:** Specifies the speech rate.
 
 ### Avatar
 
-These settings control the avatar displayed as a desktop mascot.
+Configure the behavior of the avatar displayed as a desktop mascot.
 
-yak-mcp infers an emotional state from the conversation and switches the avatar image accordingly.
-
-You can add as many emotional states as you like.
-
-* **Key:** Specify a unique key representing the emotional state. Keys must not be duplicated.
-* **Description:** Enter hints to help the AI infer when this emotional state applies.
-* **Image file:** Specify the avatar image file. Supported formats are PNG, GIF, JPEG, WebP, and SVG. The path must be absolute.
-
-After saving your settings, the MCP server will start on the specified port.
-
-From the next launch onward, the MCP server will automatically start when the application launches.
-
-You can reopen the settings screen from the system tray whenever you want to change your configuration.
+- **Mirror:** Enable this option to flip the avatar image horizontally.
+- **Animation:** Select the animation to apply to the avatar image.
+  - **None:** No animation.
+  - **Sway:** Gently sways from side to side.
+  - **Weight shift:** Slowly shifts its weight from side to side.
+  - **Breathing:** Gently stretches and contracts as if breathing.
+  - **Float:** Slowly moves up and down as if floating.
+- **Opacity:** Specifies the opacity of the avatar image.
+- **Ignore mouse events:** When enabled, mouse events pass through the avatar. Disable this option when moving or resizing the avatar window.
+- **Emotional states:** yak-mcp switches the avatar image based on the emotional state specified by the AI. You can add as many emotional states as you like.
+  - **Key:** Specifies a unique key identifying the emotional state. Keys must not be duplicated.
+  - **Description:** Enter a description that helps the AI select this emotional state.
+  - **Image file:** Specifies the file path to the avatar image. Supported formats are PNG, GIF, JPEG, WebP, and SVG. An absolute path is required.
 
 ---
 
-### Configuring Your Coding Agent
+### AI Agent Configuration
 
-Add the following configuration to your coding agent to connect to the MCP server.
+yak-mcp can be used with any MCP-compatible AI agent.
+The only tool provided by yak-mcp is the `say` tool.
+
+See the sections below for configuration examples for popular AI agents.
+If you are using Docker Desktop and want to access yak-mcp from a devcontainer, use `host.docker.internal` instead of `localhost`.
 
 #### Codex
 
-Add the following to `config.toml`:
+Add the following configuration to `~/.codex/config.toml`:
 
 ```toml
 [mcp_servers.yak]
 url = "http://localhost:39442/mcp"
 ```
 
+To always approve the `say` tool, also add the following configuration to `~/.codex/config.toml`:
+
+```toml
+[mcp_servers.yak.tools.say]
+approval_mode = "approve"
+```
+
 #### Claude Code
 
-Add the following to `.mcp.json`:
+Add the following configuration to `~/.claude.json`:
 
 ```json
 {
@@ -108,21 +128,29 @@ Add the following to `.mcp.json`:
 }
 ```
 
-* If you are using Docker Desktop and want to connect from a devcontainer, set the host to `host.docker.internal`.
-* If you are connecting from a coding agent running locally, `localhost` works fine.
-* Make sure the port number matches the one specified in the settings.
+To always allow the `say` tool, add the following configuration to `~/.claude/settings.json`:
 
-To allow unconditional access to this tool, enable the `yak.say` permission.
+```json
+{
+  "permissions": {
+    "allow": [
+      "mcp__yak__say"
+    ]
+  }
+}
+```
 
 ---
 
-### Using `host.docker.internal` from WSL
+### (Optional) Using `host.docker.internal` from WSL
 
-You can use `host.docker.internal` from WSL just like you would from a devcontainer.
+By adding `host.docker.internal` to `/etc/hosts` in WSL, you can connect to the Windows host from WSL using `host.docker.internal`, just as you would from a Docker container.
 
-To do this, add `host.docker.internal` to `/etc/hosts` when WSL starts. This allows a coding agent running in WSL to connect to the MCP server running on the Windows host using the same hostname, `host.docker.internal`, as a devcontainer.
+To automate this, follow these steps.
 
-Create a shell script at any location. In this example, we will use `/usr/local/update-host.sh`.
+#### 1. Create a shell script at any path
+
+In this example, the script is `/usr/local/update-hosts.sh`.
 
 ```sh
 #!/bin/bash
@@ -136,53 +164,61 @@ sed -i "/[[:space:]]${WINDOWS_HOSTNAME}$/d" /etc/hosts
 echo "${ip_addr} ${WINDOWS_HOSTNAME}" >> /etc/hosts
 ```
 
-Then add the following configuration to `/etc/wsl.conf` to run the script when WSL starts:
+#### 2. Configure WSL to run the script when WSL starts
+
+Add the following to `/etc/wsl.conf`:
 
 ```text
 [boot]
 systemd=true
-command=/usr/local/update-host.sh
+command=/usr/local/update-hosts.sh
 ```
 
 ---
 
 ### Testing
 
-Once the setup is complete, start your coding agent and try the following instruction:
+Once setup is complete, start your AI agent and send the following message:
 
 ```text
-use yak.say to say "hello"
+use yak.say to say "こんにちは"
 ```
 
-If the agent speaks, the setup is successful.
+If yak-mcp speaks, the setup is complete.
+
+Alternatively, if the REST API is enabled, you can test it with:
+
+```sh
+curl -X POST http://host.docker.internal:39442/say -d '{"text": "こんにちは", "state":"neutral"}'
+```
 
 ---
 
-Enjoy using your noisy, talkative coding agent!
+Enjoy your chatty and noisy AI agent!
 
 ## For Developers
 
-### Recommended IDE Setup
+### Recommended IDE
 
-* [VSCode](https://code.visualstudio.com/)
+- [VSCode](https://code.visualstudio.com/)
 
-### Project Setup
+### Development
 
-#### Install
+#### Install dependencies
 
-```bash
+```sh
 pnpm install
 ```
 
-#### Development
+#### Start the development server
 
-```bash
+```sh
 pnpm dev
 ```
 
-#### Build
+#### Build for production
 
-```bash
+```sh
 # For Windows
 $ pnpm build:win
 

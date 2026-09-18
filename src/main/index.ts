@@ -63,7 +63,7 @@ app.whenReady().then(() => {
   // タスクトレイアイコン
   const contextMenu = Menu.buildFromTemplate([
     {
-      label: "元のサイズに戻す",
+      label: "Restore",
       type: "normal",
       enabled: false,
       click: () => {
@@ -71,7 +71,7 @@ app.whenReady().then(() => {
       },
     },
     {
-      label: "位置をリセット",
+      label: "Reset position",
       type: "normal",
       enabled: true,
       click: () => {
@@ -79,7 +79,7 @@ app.whenReady().then(() => {
       },
     },
     {
-      label: "設定",
+      label: "Config",
       type: "normal",
       enabled: true,
       click: () => {
@@ -87,21 +87,21 @@ app.whenReady().then(() => {
         configWindow.open(config);
       },
     },
-    { label: "終了", role: "quit" },
+    { label: "Quit", role: "quit" },
   ]);
   trayIcon = new Tray(path.join(app.getAppPath(), "resources", "icon.ico"));
   trayIcon.setToolTip(AppName);
   trayIcon.setContextMenu(contextMenu);
 
   mainWindow.onMinimize(() => {
-    const item = contextMenu.items.find((item) => item.label === "元のサイズに戻す");
+    const item = contextMenu.items.find((item) => item.label === "Restore");
     if (!item) {
       return;
     }
     item.enabled = true;
   });
   mainWindow.onRestore(() => {
-    const item = contextMenu.items.find((item) => item.label === "元のサイズに戻す");
+    const item = contextMenu.items.find((item) => item.label === "Restore");
     if (!item) {
       return;
     }

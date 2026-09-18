@@ -31,6 +31,7 @@ export class MCPServer {
       version: this.version,
     });
 
+    // MCP Tool
     this.server.addTool({
       name: "say",
       description: `WHEN TO USE:
@@ -60,6 +61,29 @@ TIPS:
         this.onSay(args.text, config.avatar.states.find((sate) => sate.key === args.state)?.key ?? "waiting", config);
       },
     });
+
+    // REST API
+    if (config.mcp.restAPI) {
+      const app = this.server.getApp();
+      app.post("/say", async (ctx) => {
+        try {
+          const payload = await ctx.req.json<{ text: string; state: string }>();
+
+          try {
+            this.onSay(
+              payload.text,
+              config.avatar.states.find((sate) => sate.key === payload.state)?.key ?? "waiting",
+              config,
+            );
+            return ctx.text("OK", 200);
+          } catch {
+            return ctx.text("Internal Server Error", 500);
+          }
+        } catch {
+          return ctx.text("Bad Request", 400);
+        }
+      });
+    }
 
     await this.server.start({
       transportType: "httpStream",

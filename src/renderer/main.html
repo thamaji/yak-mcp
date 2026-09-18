@@ -48,19 +48,17 @@
       }
 
       .breathing {
-        animation: breathing 3.2s ease-in-out infinite;
+        animation: breathing 4s ease-in-out infinite;
         transform-origin: center bottom;
       }
 
       @keyframes breathing {
-        0% {
-          transform: scaleY(1);
-        }
-        30% {
-          transform: scaleY(0.98);
-        }
+        0%,
         100% {
           transform: scaleY(1);
+        }
+        70% {
+          transform: scaleY(0.98);
         }
       }
 

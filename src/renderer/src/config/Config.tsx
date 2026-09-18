@@ -1,5 +1,6 @@
 import {
   Button,
+  Code,
   Divider,
   Fieldset,
   Group,
@@ -28,6 +29,7 @@ export const Config: React.FC = () => {
       mcp: {
         host: "",
         port: 8080,
+        restAPI: false,
       },
       tts: {
         provider: "webSpeechAPI",
@@ -102,6 +104,7 @@ export const Config: React.FC = () => {
         mcp: {
           host: config.mcp.host,
           port: config.mcp.port,
+          restAPI: config.mcp.restAPI,
         },
         tts: {
           provider: config.tts.provider,
@@ -109,14 +112,14 @@ export const Config: React.FC = () => {
             lang: config.tts.webSpeechAPI.lang,
             volume: config.tts.webSpeechAPI.volume * 100,
             pitch: (config.tts.webSpeechAPI.pitch - 1) * 100,
-            rate: config.tts.webSpeechAPI.rate,
+            rate: config.tts.webSpeechAPI.rate * 100,
           },
           voicevox: {
             baseURL: config.tts.voicevox.baseURL,
             speakerID: config.tts.voicevox.speakerID,
             volume: config.tts.voicevox.volume * 100,
             pitch: config.tts.voicevox.pitch * 100,
-            rate: config.tts.voicevox.rate,
+            rate: config.tts.voicevox.rate * 100,
           },
         },
         avatar: {
@@ -147,14 +150,14 @@ export const Config: React.FC = () => {
               lang: values.tts.webSpeechAPI.lang,
               volume: values.tts.webSpeechAPI.volume / 100,
               pitch: (values.tts.webSpeechAPI.pitch + 100) / 100,
-              rate: values.tts.webSpeechAPI.rate,
+              rate: values.tts.webSpeechAPI.rate / 100,
             },
             voicevox: {
               baseURL: values.tts.voicevox.baseURL,
               speakerID: values.tts.voicevox.speakerID,
               volume: values.tts.voicevox.volume / 100,
               pitch: values.tts.voicevox.pitch / 100,
-              rate: values.tts.voicevox.rate,
+              rate: values.tts.voicevox.rate / 100,
             },
           },
           avatar: {
@@ -191,6 +194,29 @@ export const Config: React.FC = () => {
             hideControls
             key={form.key("mcp.port")}
             {...form.getInputProps("mcp.port")}
+          />
+
+          <InputLabel>REST API</InputLabel>
+          <InputDescription>
+            When enabled, clients other than AI agents will be able to use yak-mcp's speech functionality via the REST
+            API.
+            <br />
+            The REST API endpoint is POST http://localhost:{form.values.mcp.port}/say, and the body should contain JSON
+            similar to the following: <Code>{`{text: "hello", state: "waiting"}`}</Code>
+          </InputDescription>
+          <Select
+            data={[
+              { label: "Disabled", value: "disabled" },
+              { label: "Enabled", value: "enabled" },
+            ]}
+            clearable={false}
+            value={form.values.mcp.restAPI ? "enabled" : "disabled"}
+            onChange={(restAPI) => {
+              if (!restAPI) {
+                return;
+              }
+              form.setFieldValue("mcp.restAPI", restAPI === "enabled");
+            }}
           />
         </ConfigTabsPanel>
 
@@ -275,25 +301,18 @@ export const Config: React.FC = () => {
               />
 
               <InputLabel mt="sm">Rate</InputLabel>
-              <Select
-                data={[
-                  { value: "0.25", label: "0.25x" },
-                  { value: "0.50", label: "0.50x" },
-                  { value: "0.75", label: "0.75x" },
-                  { value: "1.00", label: "1.00x" },
-                  { value: "1.25", label: "1.25x" },
-                  { value: "1.50", label: "1.50x" },
-                  { value: "1.75", label: "1.75x" },
-                  { value: "2.00", label: "2.00x" },
+              <Slider
+                mb="md"
+                min={1}
+                max={200}
+                marks={[
+                  { value: 1, label: "x0.01" }, // 0.01
+                  { value: 100, label: "x1.0" }, // 1
+                  { value: 200, label: "x2.0" }, // 2
                 ]}
-                allowDeselect={false}
-                value={form.values.tts.webSpeechAPI.rate.toFixed(2)}
-                onChange={(value) => {
-                  if (value === null) {
-                    return;
-                  }
-                  form.setFieldValue("tts.webSpeechAPI.rate", parseFloat(value));
-                }}
+                label={(value) => `x${(value / 100).toFixed(2)}`}
+                value={form.values.tts.webSpeechAPI.rate}
+                onChange={(value) => form.setFieldValue("tts.webSpeechAPI.rate", value)}
               />
             </Fieldset>
           )}
@@ -358,25 +377,18 @@ export const Config: React.FC = () => {
               />
 
               <InputLabel mt="sm">Rate</InputLabel>
-              <Select
-                data={[
-                  { value: "0.25", label: "0.25x" },
-                  { value: "0.50", label: "0.50x" },
-                  { value: "0.75", label: "0.75x" },
-                  { value: "1.00", label: "1.00x" },
-                  { value: "1.25", label: "1.25x" },
-                  { value: "1.50", label: "1.50x" },
-                  { value: "1.75", label: "1.75x" },
-                  { value: "2.00", label: "2.00x" },
+              <Slider
+                mb="md"
+                min={1}
+                max={200}
+                marks={[
+                  { value: 1, label: "x0.01" }, // 0.01
+                  { value: 100, label: "x1.0" }, // 1
+                  { value: 200, label: "x2.0" }, // 2
                 ]}
-                allowDeselect={false}
-                value={form.values.tts.voicevox.rate.toFixed(2)}
-                onChange={(value) => {
-                  if (value === null) {
-                    return;
-                  }
-                  form.setFieldValue("tts.voicevox.rate", parseFloat(value));
-                }}
+                label={(value) => `x${(value / 100).toFixed(2)}`}
+                value={form.values.tts.voicevox.rate}
+                onChange={(value) => form.setFieldValue("tts.voicevox.rate", value)}
               />
             </Fieldset>
           )}
@@ -384,7 +396,7 @@ export const Config: React.FC = () => {
 
         <ConfigTabsPanel value="avatar" isChanged={!form.isDirty()} isValid={form.isValid()}>
           <InputLabel>Mirror</InputLabel>
-          <InputDescription>The avatar image will be displayed horizontally flipped</InputDescription>
+          <InputDescription>The avatar image will be displayed horizontally flipped.</InputDescription>
           <Select
             data={[
               { label: "Disabled", value: "disabled" },

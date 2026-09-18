@@ -5,6 +5,7 @@ export type Config = {
   mcp: {
     host: string;
     port: number;
+    restAPI: boolean;
   };
   tts: {
     provider: string;
@@ -42,6 +43,7 @@ export const DefaultConfig: Config = {
   mcp: {
     host: "0.0.0.0",
     port: 39442,
+    restAPI: false,
   },
   tts: {
     provider: "webSpeechAPI",
