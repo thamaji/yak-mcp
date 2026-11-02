@@ -55,6 +55,14 @@ export class ConfigStore {
       }
 
       if (
+        config.tts.maxQueueWaitTime == null ||
+        !Number.isFinite(config.tts.maxQueueWaitTime) ||
+        config.tts.maxQueueWaitTime < 0
+      ) {
+        config.tts.maxQueueWaitTime = DefaultConfig.tts.maxQueueWaitTime;
+      }
+
+      if (
         config.tts.webSpeechAPI == null ||
         typeof config.tts.webSpeechAPI !== "object" ||
         Array.isArray(config.tts.webSpeechAPI)

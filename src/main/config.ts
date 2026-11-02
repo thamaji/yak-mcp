@@ -9,6 +9,7 @@ export type Config = {
   };
   tts: {
     provider: string;
+    maxQueueWaitTime: number;
     webSpeechAPI: {
       lang: string;
       volume: number;
@@ -47,6 +48,7 @@ export const DefaultConfig: Config = {
   },
   tts: {
     provider: "webSpeechAPI",
+    maxQueueWaitTime: 15 * 1000,
     webSpeechAPI: {
       lang: "ja-JP",
       volume: 1.0,

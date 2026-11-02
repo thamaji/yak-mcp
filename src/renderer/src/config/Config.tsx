@@ -33,6 +33,7 @@ export const Config: React.FC = () => {
       },
       tts: {
         provider: "webSpeechAPI",
+        maxQueueWaitTime: 15,
         webSpeechAPI: {
           lang: "ja-JP",
           volume: 100,
@@ -55,7 +56,7 @@ export const Config: React.FC = () => {
         waiting: {
           path: "",
         },
-        states: [] as { key: string; description: string; path: string }[],
+        states: [] as { key: string; description: string; path: string; id: string }[],
       },
     },
     validate: {
@@ -108,6 +109,7 @@ export const Config: React.FC = () => {
         },
         tts: {
           provider: config.tts.provider,
+          maxQueueWaitTime: config.tts.maxQueueWaitTime,
           webSpeechAPI: {
             lang: config.tts.webSpeechAPI.lang,
             volume: config.tts.webSpeechAPI.volume * 100,
@@ -128,7 +130,7 @@ export const Config: React.FC = () => {
           opacity: config.avatar.opacity * 100,
           ignoreMouseEvents: config.avatar.ignoreMouseEvents,
           waiting: { ...config.avatar.waiting },
-          states: config.avatar.states.map((state) => ({ ...state })),
+          states: config.avatar.states.map((state) => ({ ...state, id: crypto.randomUUID() })),
         },
       };
       form.setValues(values);
@@ -146,6 +148,7 @@ export const Config: React.FC = () => {
           mcp: { ...values.mcp },
           tts: {
             provider: values.tts.provider,
+            maxQueueWaitTime: values.tts.maxQueueWaitTime,
             webSpeechAPI: {
               lang: values.tts.webSpeechAPI.lang,
               volume: values.tts.webSpeechAPI.volume / 100,
@@ -168,7 +171,7 @@ export const Config: React.FC = () => {
             waiting: { ...values.avatar.waiting },
             states: values.avatar.states
               .filter((state) => state.key.trim() !== "" && state.path.trim() !== "")
-              .map((state) => ({ ...state })),
+              .map((state) => ({ key: state.key, description: state.description, path: state.path })),
           },
         });
         form.resetDirty(values);
@@ -196,7 +199,7 @@ export const Config: React.FC = () => {
             {...form.getInputProps("mcp.port")}
           />
 
-          <InputLabel>REST API</InputLabel>
+          <InputLabel mt="sm">REST API</InputLabel>
           <InputDescription>
             When enabled, clients other than AI agents will be able to use yak-mcp's speech functionality via the REST
             API.
@@ -235,6 +238,33 @@ export const Config: React.FC = () => {
                 return;
               }
               form.setFieldValue("tts.provider", provider);
+            }}
+          />
+
+          <InputLabel mt="sm">Maximum Queue Wait Time</InputLabel>
+          <InputDescription>
+            Maximum time a speech request can wait in the queue before it is discarded. Requests that exceed this limit
+            will be skipped.
+          </InputDescription>
+          <Select
+            data={[
+              { value: "5000", label: "5 seconds" },
+              { value: "10000", label: "10 seconds" },
+              { value: "15000", label: "15 seconds" },
+              { value: "30000", label: "30 seconds" },
+              { value: "60000", label: "1 minute" },
+              { value: "180000", label: "3 minutes" },
+              { value: "300000", label: "5 minutes" },
+              { value: "600000", label: "10 minutes" },
+              { value: "0", label: "Unlimited" },
+            ]}
+            allowDeselect={false}
+            value={Math.trunc(form.values.tts.maxQueueWaitTime).toString()}
+            onChange={(value) => {
+              if (value === null) {
+                return;
+              }
+              form.setFieldValue("tts.maxQueueWaitTime", Number(value));
             }}
           />
 
@@ -494,7 +524,7 @@ export const Config: React.FC = () => {
             <Divider my="sm" />
 
             {form.values.avatar.states.map((state, i) => (
-              <React.Fragment key={`avatar.states.${state.key}_${state.description}_${state.path}_${i}`}>
+              <React.Fragment key={state.id}>
                 <InputLabel>Key</InputLabel>
                 <InputDescription>A unique key to identify an emotional state.</InputDescription>
                 <TextInput key={form.key(`avatar.states.${i}.key`)} {...form.getInputProps(`avatar.states.${i}.key`)} />
@@ -526,10 +556,7 @@ export const Config: React.FC = () => {
                     color="red"
                     size="xs"
                     onClick={() => {
-                      console.log(form.values.avatar.states);
-                      console.log("removeListItem", "avatar.states", i);
                       form.removeListItem("avatar.states", i);
-                      console.log(form.values.avatar.states);
                     }}
                   >
                     Remove
@@ -546,7 +573,7 @@ export const Config: React.FC = () => {
                 variant="outline"
                 size="xs"
                 onClick={() => {
-                  form.insertListItem("avatar.states", { key: "", description: "", path: "" });
+                  form.insertListItem("avatar.states", { id: crypto.randomUUID(), key: "", description: "", path: "" });
                 }}
               >
                 Add
