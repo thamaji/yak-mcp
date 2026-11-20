@@ -494,7 +494,6 @@ export const Config: React.FC = () => {
               </InputDescription>
               <TextInput
                 placeholder=""
-                key={form.key("tts.irodoritts.voice")}
                 value={form.values.tts.irodoritts.voice ?? ""}
                 onChange={(value) => {
                   const voice = value.currentTarget.value.trim();
