@@ -23,6 +23,13 @@ export type Config = {
       pitch: number;
       rate: number;
     };
+    irodoritts: {
+      baseURL: string,
+      voice: string | null,
+      caption: string,
+      volume: number,
+      rate: number,
+    },
   };
   avatar: {
     mirror: boolean;
@@ -60,6 +67,13 @@ export const DefaultConfig: Config = {
       speakerID: 1,
       volume: 1.0,
       pitch: 0,
+      rate: 1.0,
+    },
+    irodoritts: {
+      baseURL: "http://localhost:8088",
+      voice: null,
+      caption: "若い成人女性の声。女性らしい声質で、自然な中音域。明るく親しみやすく、少しくだけた話し方。",
+      volume: 1.0,
       rate: 1.0,
     },
   },

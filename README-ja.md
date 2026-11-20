@@ -50,9 +50,16 @@ https://github.com/user-attachments/assets/1143fea3-f8cb-4317-8869-c5e23d893e63
 
 ### TTS (Text-to-Speech)
 
-組み込みの「Web Speech API」か、「VOICEVOX」を選択できます。
+組み込みの「Web Speech API」か、「VOICEVOX / AivisSpeech」、または「Irodori-TTS」を選択できます。
 
-VOICEVOX を利用するには [VOICEVOX Engine](https://github.com/VOICEVOX/voicevox_engine) が実行されている必要があります。
+「Web Speech API」以外の音声合成エンジンを利用するには、それぞれの音声合成エンジンが実行されている必要があります。  
+セットアップは各エンジンのリポジトリを参照してください。  
+
+| 音声合成エンジン | リポジトリ                                          |
+| ---------------- | --------------------------------------------------- |
+| VOICEVOX         | https://github.com/VOICEVOX/voicevox_engine         |
+| AivisSpeech      | https://github.com/aivis-project/AivisSpeech-Engine |
+| Irodori-TTS      | https://github.com/Aratako/Irodori-TTS-Server       |
 
 #### Web Speech API
 
@@ -61,12 +68,21 @@ VOICEVOX を利用するには [VOICEVOX Engine](https://github.com/VOICEVOX/voi
 * **Pitch:** 声の高さを指定します。
 * **Rate:** 喋る速さを指定します。
 
-#### VOICEVOX
+#### VOICEVOX / AivisSpeech
 
 * **Base URL:** VOICEVOX Engine が提供する REST API のエンドポイントを指定します。標準的なセットアップでは `http://localhost:50021` を指定してください。
+  または、VOICEVOX Engine と互換のある AivisSpeech Engine も利用できます。AivisSpeech の標準的なセットアップでは `http://localhost:10101` を指定してください。
 * **Speaker ID:** 話者IDを指定します。標準的なセットアップの場合、`http://localhost:50021/speakers` にアクセスすると、話者の一覧や話者IDを確認できます。
 * **Volume:** 声の大きさを指定します。
 * **Pitch:** 声の高さを指定します。
+* **Rate:** 喋る速さを指定します。
+
+#### Irodori-TTS
+
+* **Base URL:** Irodori-TTS Server のベース URL を指定します。標準的なセットアップでは `http://localhost:8088` を指定してください。また、yak-mcp から Irodori-TTS Server を利用するには、Irodori-TTS Server の環境変数に `IRODORI_CORS_ORIGINS='["*"]'` が指定されている必要があります。
+* **Reference Voice:** 音声合成に使用する参照音声を指定します。未指定の場合は参照音声を使用せず、声質を文章で指定する Voice Design を利用します。
+* **Caption:** 声の特徴や話し方、感情などを自然言語で指定します。例：「落ち着いた声で、穏やかに話す」
+* **Volume:** 声の大きさを指定します。
 * **Rate:** 喋る速さを指定します。
 
 ### Avatar

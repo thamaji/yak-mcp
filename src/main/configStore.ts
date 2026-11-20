@@ -49,7 +49,7 @@ export class ConfigStore {
       if (
         config.tts.provider == null ||
         typeof config.tts.provider !== "string" ||
-        !["webSpeechAPI", "voicevox"].includes(config.tts.provider)
+        !["webSpeechAPI", "voicevox", "irodori-tts"].includes(config.tts.provider)
       ) {
         config.tts.provider = DefaultConfig.tts.provider;
       }
@@ -169,10 +169,61 @@ export class ConfigStore {
       if (
         config.tts.voicevox.rate == null ||
         !Number.isFinite(config.tts.voicevox.rate) ||
-        config.tts.voicevox.rate <= 0 ||
+        config.tts.voicevox.rate < 0.5 ||
         config.tts.voicevox.rate > 2
       ) {
         config.tts.voicevox.rate = DefaultConfig.tts.voicevox.rate;
+      }
+
+      if (
+        config.tts.irodoritts == null ||
+        typeof config.tts.irodoritts !== "object" ||
+        Array.isArray(config.tts.irodoritts)
+      ) {
+        config.tts.irodoritts = DefaultConfig.tts.irodoritts;
+      }
+
+      if (
+        config.tts.irodoritts.baseURL == null ||
+        typeof config.tts.irodoritts.baseURL !== "string" ||
+        config.tts.irodoritts.baseURL === ""
+      ) {
+        config.tts.irodoritts.baseURL = DefaultConfig.tts.irodoritts.baseURL;
+      }
+
+      if (
+        config.tts.irodoritts.voice != null &&
+        (
+          typeof config.tts.irodoritts.voice !== "string" ||
+          config.tts.irodoritts.voice === ""
+        )
+      ) {
+        config.tts.irodoritts.voice = DefaultConfig.tts.irodoritts.voice;
+      }
+
+      if (
+        config.tts.irodoritts.caption == null ||
+        typeof config.tts.irodoritts.caption !== "string"
+      ) {
+        config.tts.irodoritts.caption = DefaultConfig.tts.irodoritts.caption;
+      }
+
+      if (
+        config.tts.irodoritts.volume == null ||
+        !Number.isFinite(config.tts.irodoritts.volume) ||
+        config.tts.irodoritts.volume < 0 ||
+        config.tts.irodoritts.volume > 1
+      ) {
+        config.tts.irodoritts.volume = DefaultConfig.tts.irodoritts.volume;
+      }
+
+      if (
+        config.tts.irodoritts.rate == null ||
+        !Number.isFinite(config.tts.irodoritts.rate) ||
+        config.tts.irodoritts.rate < 0.25 ||
+        config.tts.irodoritts.rate > 4
+      ) {
+        config.tts.irodoritts.rate = DefaultConfig.tts.irodoritts.rate;
       }
 
       if (config.avatar == null || typeof config.avatar !== "object" || Array.isArray(config.avatar)) {

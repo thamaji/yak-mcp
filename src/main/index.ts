@@ -1,5 +1,5 @@
 import { electronApp, optimizer } from "@electron-toolkit/utils";
-import { app, Menu, net, protocol, Tray } from "electron";
+import { app, ipcMain, Menu, net, protocol, Tray } from "electron";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { DefaultConfig, type Config } from "./config";
@@ -9,7 +9,6 @@ import { MainWindow } from "./mainWindow";
 import { MCPServer } from "./mcp";
 
 const AppName = "yak-mcp";
-const AppVersion = "1.0.0";
 
 // タスクトレイ
 let trayIcon: Tray | undefined;
@@ -20,7 +19,7 @@ const mainWindow = new MainWindow();
 // MCPサーバー
 const mcpServer = new MCPServer({
   name: AppName,
-  version: AppVersion,
+  version: app.getVersion() as `${number}.${number}.${number}`,
   onSay: (text: string, state: string, config: Config) => mainWindow.say(text, state, config),
 });
 
@@ -52,7 +51,6 @@ app.whenReady().then(() => {
 
   // renderer 向けにローカルファイルシステムのファイルを返すプロトコルを追加
   protocol.handle("localfs", async (request) => {
-    process.platform === "win32";
     const url = new URL(request.url);
     const filePath = decodeURIComponent(url.pathname);
     return net.fetch(
@@ -127,6 +125,11 @@ app.whenReady().then(() => {
   // Main Window が閉じたら、Config Window も閉じる
   mainWindow.onClose(() => {
     configWindow.close();
+  });
+
+  // バージョン情報を取れるようにしておく
+  ipcMain.handle("app:getAppVersion", () => {
+    return app.getVersion();
   });
 
   // Main Window を開く

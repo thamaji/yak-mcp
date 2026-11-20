@@ -50,9 +50,17 @@ If you want to change the settings, you can open the settings window at any time
 
 ### TTS (Text-to-Speech)
 
-You can choose between the built-in **Web Speech API** and **VOICEVOX**.
+You can choose from the built-in **Web Speech API**, **VOICEVOX / AivisSpeech**, or **Irodori-TTS**.
 
-To use VOICEVOX, the [VOICEVOX Engine](https://github.com/VOICEVOX/voicevox_engine) must be running.
+To use a speech synthesis engine other than the Web Speech API, the corresponding engine must be running.
+
+For setup instructions, refer to each engine's repository:
+
+| Speech Synthesis Engine | Repository                                                                                                                        |
+| ----------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| VOICEVOX                | [https://github.com/VOICEVOX/voicevox_engine](https://github.com/VOICEVOX/voicevox_engine?utm_source=chatgpt.com)                 |
+| AivisSpeech             | [https://github.com/aivis-project/AivisSpeech-Engine](https://github.com/aivis-project/AivisSpeech-Engine?utm_source=chatgpt.com) |
+| Irodori-TTS             | [https://github.com/Aratako/Irodori-TTS-Server](https://github.com/Aratako/Irodori-TTS-Server?utm_source=chatgpt.com)             |
 
 #### Web Speech API
 
@@ -61,13 +69,22 @@ To use VOICEVOX, the [VOICEVOX Engine](https://github.com/VOICEVOX/voicevox_engi
 - **Pitch:** Specifies the voice pitch.
 - **Rate:** Specifies the speech rate.
 
-#### VOICEVOX
+#### VOICEVOX / AivisSpeech
 
-- **Base URL:** Specifies the REST API endpoint provided by VOICEVOX Engine. For a standard setup, use `http://localhost:50021`.
-- **Speaker ID:** Specifies the speaker ID. In a standard setup, access `http://localhost:50021/speakers` to view the list of speakers and their IDs.
-- **Volume:** Specifies the voice volume.
-- **Pitch:** Specifies the voice pitch.
-- **Rate:** Specifies the speech rate.
+- **Base URL:** Specify the REST API endpoint provided by VOICEVOX Engine. For a standard setup, use `http://localhost:50021`.\
+  You can also use AivisSpeech Engine, which is compatible with the VOICEVOX API. For a standard AivisSpeech setup, use `http://localhost:10101`.
+- **Speaker ID:** Specify the speaker ID. For a standard setup, access `http://localhost:50021/speakers` to view the list of speakers and their IDs.
+- **Volume:** Adjusts the voice volume.
+- **Pitch:** Adjusts the voice pitch.
+- **Rate:** Adjusts the speaking speed.
+
+#### **Irodori-TTS**
+
+- **Base URL:** Specify the base URL of Irodori-TTS Server. For a standard setup, use `http://localhost:8088`. To use Irodori-TTS Server with yak-mcp, make sure the following environment variable is set in the server's `.env` file: `IRODORI_CORS_ORIGINS='["*"]'`.
+- **Reference Voice:** Selects the reference voice used for speech synthesis. If left unspecified, no reference voice is used, and Voice Design is enabled, allowing you to describe the desired voice characteristics using text.
+- **Caption:** Describes the desired voice characteristics, speaking style, and emotions using natural language. For example: "A calm voice speaking gently."
+- **Volume:** Adjusts the voice volume.
+- **Rate:** Adjusts the speaking speed.
 
 ### Avatar
 

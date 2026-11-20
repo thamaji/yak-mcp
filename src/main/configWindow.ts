@@ -50,6 +50,8 @@ export class ConfigWindow {
 
     this.window.on("close", () => {
       this.window = undefined;
+      ipcMain.removeAllListeners("config:ready");
+      ipcMain.removeAllListeners("config:update");
     });
 
     this.window.on("ready-to-show", () => {
