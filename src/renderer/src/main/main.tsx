@@ -67,17 +67,17 @@ async function playSpeech(request: SpeechRequest) {
   const { config } = request;
 
   if (config.tts.provider === "webSpeechAPI") {
-    speechWithWebSpeechAPI(request);
+    await speechWithWebSpeechAPI(request);
     return;
   }
 
   if (config.tts.provider === "voicevox") {
-    speechWithVoicevox(request);
+    await speechWithVoicevox(request);
     return;
   }
 
   if (config.tts.provider === "irodori-tts") {
-    speechWithIrodoriTTS(request);
+    await speechWithIrodoriTTS(request);
     return;
   }
 
